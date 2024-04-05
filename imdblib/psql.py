@@ -46,6 +46,22 @@ class Psql:
             text=True,
         )
 
+    def dropdb(self):
+        return subprocess.run(
+            # fmt: off
+            [
+                "dropdb",
+                "--username", self.username,
+                "--host", self.host,
+                "--port", str(self.port),
+                self.dbname,
+            ],
+            # fmt: on
+            env={**os.environ, "PGPASSWORD": self.password},
+            check=True,
+            text=True,
+        )
+
     def command(self, command: str):
         return subprocess.run(
             # fmt: off
@@ -83,13 +99,13 @@ class Psql:
         ) as process:
             assert process.stdin is not None and process.stderr is not None
             for row in rows:
-                r = process.stdin.write(row)
+                process.stdin.write(row)
                 process.stdin.flush()
 
-                # check if process failed
-                if r == 0:
-                    process.stdin.close()
-                    raise Exception(process.stderr.read())
+                # # check if process failed
+                # if r == 0:
+                #     process.stdin.close()
+                #     raise Exception('failed', process.stderr.read())
 
             process.stdin.close()
 
@@ -141,10 +157,12 @@ class PsqlTable:
                 ) as process:
                     assert process.stdout is not None
                     return self.psql.upload(
-                        self.table.name, islice(process.stdout, 1, None)
+                        self.table.name,
+                        map(self.table.process_line, islice(process.stdout, 1, None)),
                     )
         elif stdin is True:
             import sys
+
             return self.psql.upload(self.table.name, sys.stdin)
         else:
             return self.psql.upload(self.table.name, self.table.fetch_processed())
