@@ -14,7 +14,7 @@ psql = Psql(
 
 
 def main(argv: list[str]):
-    match argv[1:]:
+    match argv:
         case ["db", "create"]:
             psql.createdb()
 
@@ -40,7 +40,7 @@ def main(argv: list[str]):
 
         case ["all", command, *rest]:
             for table in psql.all_tables():
-                main(["imdb", table.table.name, command, *rest])
+                main([table.table.name, command, *rest])
 
         case [table_name, command, *rest]:
             table = psql.table(name=table_name)  # type: ignore
@@ -62,6 +62,9 @@ def main(argv: list[str]):
 
                 case "add_primary_key":
                     table.add_primary_key()
+
+                case "add_references":
+                    table.add_references()
 
                 case "process":
                     for line in sys.stdin:
@@ -103,7 +106,7 @@ def main(argv: list[str]):
                     table.upload(stdin=True)
 
                 case _:
-                    main(["imdb", "help"])
+                    main(["help"])
 
         case _:
             print(
@@ -120,4 +123,4 @@ def main(argv: list[str]):
 
 
 signal(SIGPIPE, SIG_DFL)
-main(sys.argv)
+main(sys.argv[1:])

@@ -34,11 +34,13 @@ add_primary_key = r"""
 ALTER TABLE title_akas ADD PRIMARY KEY (title_id, ordering);
 """
 
-add_references = r"""
-ALTER TABLE title_akas ADD CONSTRAINT fk_title_akas_title_id
-    FOREIGN KEY (title_id)
-    REFERENCES title_basics (title_id);
-"""
+add_references = r""""""
+
+# add_references = r"""
+# ALTER TABLE title_akas ADD CONSTRAINT fk_title_akas_title_id
+#     FOREIGN KEY (title_id)
+#     REFERENCES title_basics (tconst);
+# """
 
 
 def process(line: list[str]) -> list[str]:

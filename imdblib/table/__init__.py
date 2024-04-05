@@ -8,6 +8,7 @@ from . import (
     title_akas,
     title_basics,
     title_crew,
+    title_episode,
     title_principals,
     title_ratings,
 )
@@ -17,6 +18,7 @@ type TableName = Literal[
     "title_akas",
     "title_basics",
     "title_crew",
+    "title_episode",
     "title_principals",
     "title_ratings",
 ]
@@ -27,6 +29,7 @@ modules = {
     "title_akas": title_akas,
     "title_basics": title_basics,
     "title_crew": title_crew,
+    "title_episode": title_episode,
     "title_principals": title_principals,
     "title_ratings": title_ratings,
 }
