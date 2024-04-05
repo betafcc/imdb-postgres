@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "title_basics"
+from imdblib import parse
 
 docs = r"""
 title.basics.tsv.gz
@@ -63,7 +61,7 @@ CREATE TYPE GENRE AS ENUM (
     'Western'
 );
 CREATE TABLE title_basics (
-    tconst INTEGER NOT NOLL,
+    tconst INTEGER NOT NULL,
     title_type TITLE_TYPE NOT NULL,
     primary_title TEXT NOT NULL,
     original_title TEXT NOT NULL,
@@ -74,6 +72,13 @@ CREATE TABLE title_basics (
     genres GENRE [] DEFAULT NULL
 );
 """
+
+drop = r"""
+DROP TABLE IF EXISTS title_basics;
+DROP TYPE IF EXISTS TITLE_TYPE;
+DROP TYPE IF EXISTS GENRE;
+"""
+
 
 add_primary_key = r"""
 ALTER TABLE title_basics ADD PRIMARY KEY (tconst);
@@ -87,8 +92,8 @@ def process(row: list[str]) -> list[str]:
     return [
         parse.id(row[0]), # tconst INTEGER PRIMARY KEY,
         row[1], # title_type TITLE_TYPE NOT NULL,
-        row[2], # primary_title TEXT NOT NULL,
-        row[3], # original_title TEXT NOT NULL,
+        parse.text(row[2]), # primary_title TEXT NOT NULL,
+        parse.text(row[3]), # original_title TEXT NOT NULL,
         row[4], # is_adult BOOLEAN NOT NULL,
         parse.int_nullable(row[5]), # start_year INTEGER DEFAULT NULL,
         parse.int_nullable(row[6]), # end_year INTEGER DEFAULT NULL,

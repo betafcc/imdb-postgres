@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "title_ratings"
+from imdblib import parse
 
 docs = r"""
 title.ratings.tsv.gz
@@ -18,6 +16,9 @@ CREATE TABLE title_ratings (
 );
 """
 
+drop = r"""
+DROP TABLE IF EXISTS title_ratings;
+"""
 
 add_primary_key = r"""
 ALTER TABLE title_ratings ADD PRIMARY KEY (tconst);

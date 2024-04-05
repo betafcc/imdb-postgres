@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "title_principals"
+from imdblib import parse
 
 docs = r"""
 title.principals.tsv.gz
@@ -36,13 +34,38 @@ CREATE TABLE title_principals (
     nconst INTEGER NOT NULL,
     category CATEGORY NOT NULL,
     job TEXT DEFAULT NULL,
-    characters TEXT [] DEFAULT NULL
+    characters TEXT DEFAULT NULL
 );
+"""
+
+drop = r"""
+DROP TABLE IF EXISTS title_principals;
+DROP TYPE IF EXISTS CATEGORY;
 """
 
 add_primary_key = r"""
 ALTER TABLE title_principals ADD PRIMARY KEY (tconst, ordering);
 """
+
+# # characters table is too hard to serialize, it contains a JSON array string
+# # and some contain quote and comma on it, idk how to escape for postgres tsv
+# add_primary_key = r"""
+# ALTER TABLE title_principals ADD COLUMN characters_temp TEXT[];
+
+# UPDATE title_principals
+# SET characters_temp =
+#   CASE
+#     WHEN characters IS NOT NULL THEN array(
+#       SELECT json_array_elements_text(characters::json)
+#     )
+#     ELSE NULL
+#   END;
+
+# ALTER TABLE title_principals DROP COLUMN characters;
+# ALTER TABLE title_principals RENAME COLUMN characters_temp TO characters;
+
+# ALTER TABLE title_principals ADD PRIMARY KEY (tconst, ordering);
+# """
 
 add_references = r"""
 ALTER TABLE title_principals ADD CONSTRAINT fk_title_principals_tconst FOREIGN KEY (tconst) REFERENCES title_basics (tconst);
@@ -58,6 +81,6 @@ def process(row: list[str]) -> list[str]:
         parse.id(row[2]),  # nconst INTEGER NOT NULL,
         row[3],  # category CATEGORY NOT NULL,
         parse.text_nullable(row[4]),  # job TEXT DEFAULT NULL,
-        parse.characters(row[5]),  # characters TEXT [] DEFAULT NULL
+        parse.text_nullable(row[5]),  # characters TEXT DEFAULT NULL
     ]
     # fmt: on

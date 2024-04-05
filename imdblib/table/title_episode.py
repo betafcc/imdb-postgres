@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "title_episode"
+from imdblib import parse
 
 docs = r"""
 title.episode.tsv.gz
@@ -18,6 +16,10 @@ CREATE TABLE title_episode (
     season_number INTEGER DEFAULT NULL,
     episode_number INTEGER DEFAULT NULL
 );
+"""
+
+drop = r"""
+DROP TABLE IF EXISTS title_episode;
 """
 
 add_primary_key = r"""

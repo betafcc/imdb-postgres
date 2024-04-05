@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "name_basics"
+from imdblib import parse
 
 docs = r"""
 name.basics.tsv.gz
@@ -24,6 +22,10 @@ CREATE TABLE name_basics (
 );
 """
 
+drop = r"""
+DROP TABLE IF EXISTS name_basics;
+"""
+
 add_primary_key = r"""
 ALTER TABLE name_basics ADD PRIMARY KEY (nconst);
 """
@@ -35,7 +37,7 @@ def process(row: list[str]) -> list[str]:
     # fmt: off
     return [
         parse.id(row[0]),
-        row[1],
+        parse.text(row[1]),
         parse.int_nullable(row[2]),
         parse.int_nullable(row[3]),
         parse.list_nullable(row[4]),

@@ -1,6 +1,4 @@
-from imdb import parse
-
-name = "title_crew"
+from imdblib import parse
 
 docs = r"""
 title.crew.tsv.gz
@@ -16,6 +14,10 @@ CREATE TABLE title_crew (
     directors INTEGER [] DEFAULT NULL,
     writers INTEGER [] DEFAULT NULL
 );
+"""
+
+drop = r"""
+DROP TABLE IF EXISTS title_crew;
 """
 
 add_primary_key = r"""
