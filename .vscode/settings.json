@@ -1,0 +1,20 @@
+{
+  "files.watcherExclude": {
+    "**/target": true
+  },
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "query_timeout": 10000
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "IMDB",
+      "database": "imdb",
+      "username": "admin",
+      "password": "password"
+    }
+  ]
+}
