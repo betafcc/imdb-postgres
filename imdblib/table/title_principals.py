@@ -29,11 +29,17 @@ CREATE TYPE CATEGORY AS ENUM (
     'archive_sound'
 );
 CREATE TABLE title_principals (
+    -- unique identifier of the title
     tconst INTEGER NOT NULL,
+    -- a number to uniquely identify rows for a given titleId
     ordering INTEGER NOT NULL,
+    -- alphanumeric unique identifier of the name/person
     nconst INTEGER NOT NULL,
+    -- the category of job that person was in
     category CATEGORY NOT NULL,
+    -- the specific job title if applicable, else NULL
     job TEXT DEFAULT NULL,
+    -- the name of the character played if applicable, else NULL
     characters TEXT DEFAULT NULL
 );
 """
@@ -48,8 +54,8 @@ DROP TYPE IF EXISTS CATEGORY;
 # ALTER TABLE title_principals ADD COLUMN characters_temp TEXT[];
 
 # UPDATE title_principals
-# SET characters_temp = 
-#   CASE 
+# SET characters_temp =
+#   CASE
 #     WHEN characters IS NOT NULL THEN array(
 #       SELECT json_array_elements_text(characters::json)
 #     )

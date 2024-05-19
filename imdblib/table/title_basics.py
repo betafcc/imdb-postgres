@@ -61,14 +61,23 @@ CREATE TYPE GENRE AS ENUM (
     'Western'
 );
 CREATE TABLE title_basics (
+    -- unique identifier of the title
     tconst INTEGER NOT NULL,
+    -- the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)
     title_type TITLE_TYPE NOT NULL,
+    -- the more popular title / the title used by the filmmakers on promotional materials at the point of release
     primary_title TEXT NOT NULL,
+    -- original title, in the original language
     original_title TEXT NOT NULL,
+    -- false: non-adult title; true: adult title
     is_adult BOOLEAN NOT NULL,
+    -- represents the release year of a title. In the case of TV Series, it is the series start year
     start_year INTEGER DEFAULT NULL,
+    -- TV Series end year. '\N' for all other title types
     end_year INTEGER DEFAULT NULL,
+    -- primary runtime of the title, in minutes
     runtime_minutes INTEGER DEFAULT NULL,
+    -- includes up to three genres associated with the title
     genres GENRE [] DEFAULT NULL
 );
 """

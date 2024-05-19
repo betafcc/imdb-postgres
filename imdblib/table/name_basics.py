@@ -13,14 +13,21 @@ knownForTitles (array of tconsts) – titles the person is known for
 
 create = r"""
 CREATE TABLE name_basics (
+    -- unique identifier of the name/person
     nconst INTEGER NOT NULL,
+    -- name by which the person is most often credited
     primary_name TEXT,
+    -- in YYYY format
     birth_year INTEGER,
+    -- in YYYY format if applicable, else NULL
     death_year INTEGER,
+    -- the top-3 professions of the person
     primary_profession TEXT [],
+    -- titles the person is known for
     known_for_titles INTEGER []
 );
 """
+
 
 drop = r"""
 DROP TABLE IF EXISTS name_basics;

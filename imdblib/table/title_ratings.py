@@ -10,8 +10,11 @@ numVotes - number of votes the title has received
 
 create = r"""
 CREATE TABLE title_ratings (
+    -- unique identifier of the title
     tconst INTEGER NOT NULL,
+    -- weighted average of all the individual user ratings
     average_rating NUMERIC NOT NULL,
+    -- number of votes the title has received
     num_votes INTEGER NOT NULL
 );
 """

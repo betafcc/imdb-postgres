@@ -11,9 +11,13 @@ episodeNumber (integer) – episode number of the tconst in the TV series
 
 create = r"""
 CREATE TABLE title_episode (
+    -- identifier of episode
     tconst INTEGER NOT NULL,
+    -- alphanumeric identifier of the parent TV Series
     parent_tconst INTEGER NOT NULL,
+    -- season number the episode belongs to
     season_number INTEGER DEFAULT NULL,
+    -- episode number of the tconst in the TV series
     episode_number INTEGER DEFAULT NULL
 );
 """

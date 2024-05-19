@@ -15,13 +15,21 @@ isOriginalTitle (boolean) – 0: not original title; 1: original title
 
 create = r"""
 CREATE TABLE title_akas (
+    -- a tconst, an unique identifier of the title
     title_id INTEGER NOT NULL,
+    -- a number to uniquely identify rows for a given titleId
     ordering INTEGER NOT NULL,
+    -- the localized title
     title TEXT NOT NULL,
+    -- the region for this version of the title
     region VARCHAR (4) DEFAULT NULL,
+    -- the language of the title
     language VARCHAR (3) DEFAULT NULL,
+    -- Enumerated set of attributes for this alternative title. One or more of the following: "alternative", "dvd", "festival", "tv", "video", "working", "original", "imdbDisplay". New values may be added in the future without warning
     types TEXT [] DEFAULT NULL,
+    -- Additional terms to describe this alternative title, not enumerated
     attributes TEXT [] DEFAULT NULL,
+    -- false: not original title; true: original title
     is_original_title BOOLEAN NOT NULL
 );
 """

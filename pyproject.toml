@@ -9,6 +9,15 @@ readme = "README.md"
 python = "^3.12"
 
 
+[tool.poetry.group.dev.dependencies]
+polars = "^0.20.19"
+ipykernel = "^6.29.4"
+arrow-odbc = "^5.1.0"
+pandas = "^2.2.1"
+hvplot = "^0.9.2"
+pyparsing = "^3.1.2"
+openai = "^1.25.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

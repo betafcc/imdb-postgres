@@ -10,8 +10,11 @@ writers (array of nconsts) – writer(s) of the given title
 
 create = r"""
 CREATE TABLE title_crew (
+    -- unique identifier of the title
     tconst INTEGER NOT NULL,
+    -- director(s) of the given title
     directors INTEGER [] DEFAULT NULL,
+    -- writer(s) of the given title
     writers INTEGER [] DEFAULT NULL
 );
 """
