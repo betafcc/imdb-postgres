@@ -13,7 +13,7 @@ from . import (
     title_ratings,
 )
 
-type TableName = Literal[
+TableName = Literal[
     "name_basics",
     "title_akas",
     "title_basics",

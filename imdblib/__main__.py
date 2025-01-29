@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+import os
 import sys
 from signal import SIG_DFL, SIGPIPE, signal
 
 from imdblib.psql import Psql
 
 psql = Psql(
-    username="admin",
-    password="password",
+    username=os.environ.get("POSTGRES_USER", "admin"),
+    password=os.environ.get("POSTGRES_PASSWORD", "password"),
     dbname="imdb",
     host="127.0.0.1",
     port=5432,
@@ -35,13 +35,20 @@ def main(argv: list[str]):
             psql.dropdb()
 
         case ["all"]:
-            try:
-                psql.createdb()
-            except:
-                print("Database already exists")
+            # try:
+            #     psql.createdb()
+            # except:
+            #     print("Database already exists")
 
-            for table in psql.all_tables():
+            tables = psql.all_tables()
+
+            print("Will download tables:")
+            for table in tables:
+                print("-", table.table.name)
+
+            for i, table in enumerate(tables):
                 main([table.table.name, "all"])
+                print(f"Done downloading {i + 1}/{len(tables)}")
 
             # I got error 'Key (tconst)=(35557166) is not present in table "title_basics".'
             # possibly because this is a new show (checked on imdb site),
