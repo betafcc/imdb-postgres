@@ -97,11 +97,11 @@ DROP TABLE title_principals_old;
 ALTER TABLE title_principals ADD PRIMARY KEY (tconst, ordering);
 """
 
+
 add_references = r"""
 ALTER TABLE title_principals ADD CONSTRAINT fk_title_principals_tconst FOREIGN KEY (tconst) REFERENCES title_basics (tconst);
 ALTER TABLE title_principals ADD CONSTRAINT fk_title_principals_nconst FOREIGN KEY (nconst) REFERENCES name_basics (nconst);
 """
-
 
 # def parse_characters(cell: str):
 #     r"""

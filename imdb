@@ -30,9 +30,14 @@ def main(argv: list[str]):
             for table in psql.all_tables():
                 main([table.table.name, "all"])
 
-            print("Adding references")
-            for table in psql.all_tables():
-                table.add_references()
+            # I got error 'Key (tconst)=(35557166) is not present in table "title_basics".'
+            # possibly because this is a new show (checked on imdb site),
+            # and maybe was inserted during the upload process.
+            # since references prob won't help with speed in queries anyway, skip it
+
+            # print("Adding references")
+            # for table in psql.all_tables():
+            #     table.add_references()
 
         case ["all", "list"]:
             for table in psql.all_tables():
