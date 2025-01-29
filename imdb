@@ -15,6 +15,19 @@ psql = Psql(
 
 def main(argv: list[str]):
     match argv:
+        case ["help"]:
+            print(
+                r"""
+            imdb <table_name> upload
+                $ ./imdb title_basics upload
+            imdb <table_name> upload --file <file>
+                $ ./imdb title_basics upload --file ./title.basics.tsv.gz
+            imdb <table_name> upload --stdin
+                $ pv ./title.basics.tsv.gz | gzip -d | ./imdb title_basics upload --stdin
+                $ wget -O - "https://datasets.imdbws.com/title.basics.tsv.gz" | gzip -d | ./imdb title_basics upload --stdin
+            """
+            )
+
         case ["db", "create"]:
             psql.createdb()
 
@@ -114,17 +127,7 @@ def main(argv: list[str]):
                     main(["help"])
 
         case _:
-            print(
-                r"""
-            imdb <table_name> upload
-                $ ./imdb title_basics upload
-            imdb <table_name> upload --file <file>
-                $ ./imdb title_basics upload --file ./title.basics.tsv.gz
-            imdb <table_name> upload --stdin
-                $ pv ./title.basics.tsv.gz | gzip -d | ./imdb title_basics upload --stdin
-                $ wget -O - "https://datasets.imdbws.com/title.basics.tsv.gz" | gzip -d | ./imdb title_basics upload --stdin
-            """
-            )
+            main(["help"])
 
 
 signal(SIGPIPE, SIG_DFL)
