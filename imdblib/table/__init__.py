@@ -75,7 +75,7 @@ class Table:
         if quiet:
             command = f"wget -O - -q '{self.url}' | gzip -d"
         else:
-            command = f"wget -O - '{self.url}' | gzip -d"
+            command = f"wget -O - --progress=bar:force '{self.url}' | gzip -d"
 
         with subprocess.Popen(
             command,

@@ -42,9 +42,11 @@ def main(argv: list[str]):
 
             tables = psql.all_tables()
 
+            print()
             print("Will download tables:")
             for table in tables:
                 print("-", table.table.name)
+            print()
 
             for i, table in enumerate(tables):
                 main([table.table.name, "all"])
