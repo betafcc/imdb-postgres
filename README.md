@@ -19,13 +19,13 @@ docker run \
 
 This will download all the data and mount it to a volume `imdb_data` so that it persists across container restarts.
 
-The total volume size is around 20GB.
+The total size is around 20GB.
 
 To delete the volume, use `docker volume rm imdb_data`.
 
 ### Connect to the running container
 
-After the initial setup that you can connect to the database using your favorite client.
+After the initial setup you can connect to the database using your favorite client.
 
 User is 'imdb' and db is 'imdb', no password is needed.
 
