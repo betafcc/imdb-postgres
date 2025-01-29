@@ -116,8 +116,8 @@ def main(argv: list[str]):
             imdb <table_name> upload --file <file>
                 $ ./imdb title_basics upload --file ./title.basics.tsv.gz
             imdb <table_name> upload --stdin
-                $ pv ./title.basics.tsv.gz | gzip -d | ./imdb title_basics upload--stdin
-                $ wget -O - "https://datasets.imdbws.com/title.crew.tsv.gz" | gzip -d | ./imdb title_basics upload --stdin
+                $ pv ./title.basics.tsv.gz | gzip -d | ./imdb title_basics upload --stdin
+                $ wget -O - "https://datasets.imdbws.com/title.basics.tsv.gz" | gzip -d | ./imdb title_basics upload --stdin
             """
             )
 
