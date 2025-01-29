@@ -32,6 +32,179 @@ User is 'imdb' and db is 'imdb', no password is needed.
 Using the connection url `postgresql://imdb@localhost:5432/imdb`
 
 
+Example queries
+---------------
+
+#### 1. Top 10 highest-rated movies (with at least 10,000 votes)
+
+```sql
+SELECT b.primary_title,
+       r.average_rating,
+       r.num_votes
+FROM title_basics AS b
+JOIN title_ratings AS r ON b.tconst = r.tconst
+WHERE b.title_type = 'movie'
+  AND r.num_votes >= 10000
+ORDER BY r.average_rating DESC
+LIMIT 10;
+```
+
+| primary_title                                 | average_rating | num_votes |
+| --------------------------------------------- | -------------- | --------- |
+| Attack on Titan the Movie: The Last Attack    | 9.3            | 10882     |
+| The Shawshank Redemption                      | 9.3            | 2998114   |
+| The Godfather                                 | 9.2            | 2092537   |
+| Ramayana: The Legend of Prince Rama           | 9.2            | 16081     |
+| The Chaos Class                               | 9.2            | 44019     |
+| 12 Angry Men                                  | 9.0            | 907900    |
+| The Lord of the Rings: The Return of the King | 9.0            | 2051541   |
+| The Godfather Part II                         | 9.0            | 1410759   |
+| The Silence of Swastika                       | 9.0            | 10601     |
+| Schindler's List                              | 9.0            | 1502465   |
+
+#### 2. Most prolific actors/actresses (by number of credited titles)
+
+```sql
+SELECT n.primary_name AS name,
+       COUNT(*)       AS title_count
+FROM title_principals AS p
+JOIN name_basics      AS n ON p.nconst = n.nconst
+WHERE p.category IN ('actor', 'actress')
+GROUP BY n.nconst, n.primary_name
+ORDER BY title_count DESC
+LIMIT 10;
+```
+
+| name              | title_count |
+| ----------------- | ----------- |
+| Kenjirô Ishimaru  | 10982       |
+| Vic Sotto         | 10659       |
+| Tito Sotto        | 9999        |
+| Sameera Sherief   | 9905        |
+| Dee Bradley Baker | 9355        |
+| Delhi Kumar       | 8634        |
+| David Kaye        | 8205        |
+| Manuela do Monte  | 8163        |
+| Arnold Clavio     | 8027        |
+| Pia Arcangel      | 8025        |
+
+
+#### 3. Most common genres in the dataset
+
+```sql
+SELECT unnest(genres) AS genre,
+       COUNT(*)       AS count
+FROM title_basics
+WHERE genres IS NOT NULL
+GROUP BY unnest(genres)
+ORDER BY count DESC;
+```
+
+| genre       | count   |
+| ----------- | ------- |
+| Drama       | 3216838 |
+| Comedy      | 2228311 |
+| Talk-Show   | 1411121 |
+| Short       | 1221605 |
+| Documentary | 1089506 |
+| News        | 1073869 |
+| Romance     | 1064419 |
+| Family      | 843980  |
+| Reality-TV  | 637962  |
+| Animation   | 568493  |
+| Action      | 472887  |
+| Crime       | 472720  |
+| Adventure   | 435285  |
+| Game-Show   | 432265  |
+| Music       | 425407  |
+| Adult       | 364373  |
+| Sport       | 284124  |
+| Fantasy     | 241510  |
+| Mystery     | 232211  |
+| Horror      | 217486  |
+| Thriller    | 189022  |
+| History     | 169734  |
+| Biography   | 122530  |
+| Sci-Fi      | 118513  |
+| Musical     | 93299   |
+| War         | 39226   |
+| Western     | 31127   |
+| Film-Noir   | 868     |
+
+#### 4. Top-rated TV Series episodes (with at least 1000 votes)
+
+```sql
+SELECT b.primary_title AS episode_title,
+       parent_b.primary_title AS series_title,
+       r.average_rating,
+       r.num_votes
+FROM title_basics AS b
+JOIN title_episode  AS e ON b.tconst = e.tconst
+JOIN title_basics  AS parent_b ON e.parent_tconst = parent_b.tconst
+JOIN title_ratings AS r ON b.tconst = r.tconst
+WHERE b.title_type = 'tvEpisode'
+  AND r.num_votes >= 1000
+ORDER BY r.average_rating DESC
+LIMIT 10;
+```
+
+| episode_title                  | series_title                  | average_rating | num_votes |
+| ------------------------------ | ----------------------------- | -------------- | --------- |
+| Ozymandias                     | Breaking Bad                  | 10.0           | 237629    |
+| Felina                         | Breaking Bad                  | 9.9            | 152114    |
+| The View from Halfway Down     | BoJack Horseman               | 9.9            | 24196     |
+| Dream: To See It to the End    | Legend of the Galactic Heroes | 9.9            | 1538      |
+| The Magician Doesn't Come Back | Legend of the Galactic Heroes | 9.9            | 1720      |
+| 13. Bolum                      | Gönülçelen                    | 9.9            | 1308      |
+| Connor's Wedding               | Succession                    | 9.9            | 38817     |
+| Somewhere in the Woods         | Gravity Falls                 | 9.9            | 3380      |
+| Battle of the Bastards         | Game of Thrones               | 9.9            | 235736    |
+| Episode #1.19                  | Asi                           | 9.9            | 1095      |
+
+#### 5. Average runtime per genre (movies only)
+
+```sql
+SELECT unnest(genres) AS genre,
+       AVG(runtime_minutes)::INT AS avg_runtime
+FROM title_basics
+WHERE title_type = 'movie'
+  AND runtime_minutes IS NOT NULL
+  AND genres IS NOT NULL
+GROUP BY unnest(genres)
+ORDER BY avg_runtime DESC;
+```
+
+| genre       | avg_runtime |
+| ----------- | ----------- |
+| Action      | 101         |
+| Romance     | 99          |
+| Musical     | 99          |
+| Drama       | 96          |
+| Thriller    | 96          |
+| Crime       | 95          |
+| War         | 95          |
+| History     | 94          |
+| Mystery     | 94          |
+| Adventure   | 93          |
+| Fantasy     | 93          |
+| Comedy      | 93          |
+| Family      | 92          |
+| Sci-Fi      | 91          |
+| Animation   | 90          |
+| Sport       | 89          |
+| Biography   | 89          |
+| Music       | 88          |
+| Horror      | 88          |
+| Talk-Show   | 86          |
+| Reality-TV  | 85          |
+| Film-Noir   | 82          |
+| Adult       | 79          |
+| Documentary | 78          |
+| Western     | 76          |
+| News        | 75          |
+| Game-Show   | 67          |
+
+
 Table documentation
 -------------------
 
