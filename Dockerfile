@@ -8,11 +8,9 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY . /app/
-
-RUN chmod +x /app/init.sh
-
+COPY imdblib /app/imdblib
 COPY init.sh /docker-entrypoint-initdb.d/init.sh
+RUN chmod +x /docker-entrypoint-initdb.d/init.sh
 
 ENV POSTGRES_USER=imdb
 ENV POSTGRES_PASSWORD=password
