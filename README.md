@@ -364,7 +364,7 @@ CREATE TABLE title_principals (
     -- the specific job title if applicable, else NULL
     job TEXT DEFAULT NULL,
     -- the name of the character played if applicable, else NULL
-    characters TEXT DEFAULT NULL
+    characters TEXT[] DEFAULT NULL
 );
 
 --
